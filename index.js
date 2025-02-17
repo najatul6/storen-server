@@ -115,14 +115,14 @@ async function run() {
     app.delete("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
       const { id } = req.params;
       const query = { _id: new ObjectId(id) };
-      const user = await usersCollection.findOne(query);
-      if (user.uid) {
-        await admin.auth().deleteUser(user.uid);
-      }
       const result = await usersCollection.deleteOne(query);
       res.send(result);
     });
 
+    app.get("/allUsers", verifyToken, verifyAdmin, async (req, res) => {
+      const result = await usersCollection.find().toArray();
+      res.send(result);
+    });
    
 
 
