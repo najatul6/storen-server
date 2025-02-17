@@ -104,6 +104,24 @@ async function run() {
       res.send(result);
     });
     
+    app.put("/users/:email", verifyToken,  async (req, res) => {
+      const { email } = req.params;
+      const query = { email: email };
+      const update = { $set: req.body };
+      const result = await usersCollection.updateOne(query, update);
+      res.send(result);
+    });
+
+    app.delete("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const user = await usersCollection.findOne(query);
+      if (user.uid) {
+        await admin.auth().deleteUser(user.uid);
+      }
+      const result = await usersCollection.deleteOne(query);
+      res.send(result);
+    });
 
    
 
