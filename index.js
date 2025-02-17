@@ -242,6 +242,10 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/allOrders", async (req, res) => {
+      const result = await orderCollection.find().toArray();
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
