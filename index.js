@@ -10,7 +10,7 @@ const uri = process.env.MONGODB_URI;
 app.use(express.json());
 
 app.use(
-  cors({ origin: [ "http://localhost:5173"] })
+  cors({ origin: ["http://localhost:5173"] })
 );
 
 
@@ -48,9 +48,9 @@ async function run() {
       if (!req.headers.authorization) {
         return res.status(401).send({ message: "unauthorized access" });
       }
-      
+
       const token = req.headers.authorization.split(" ")[1];
-      
+
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
         if (err || !decoded) {
           return res.status(401).send({ message: "Token expired or unauthorized access" });
@@ -59,7 +59,7 @@ async function run() {
         next();
       });
     };
-    
+
 
     // Verify Admin
     const verifyAdmin = async (req, res, next) => {
@@ -103,8 +103,8 @@ async function run() {
       const result = await usersCollection.updateOne(query, update);
       res.send(result);
     });
-    
-    app.put("/users/:email", verifyToken,  async (req, res) => {
+
+    app.put("/users/:email", verifyToken, async (req, res) => {
       const { email } = req.params;
       const query = { email: email };
       const update = { $set: req.body };
@@ -152,7 +152,13 @@ async function run() {
       const result = await productsCollection.deleteOne(query);
       res.send(result);
     });
-   
+
+
+    // Get all Categories
+    app.get("/category", async (req, res) => {
+      const result = await categoryCollection.find().toArray();
+      res.send(result);
+    });
 
 
 
