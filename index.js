@@ -74,6 +74,14 @@ async function run() {
     };
 
     // Get all users
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    });
+
+
     app.post("/createUser", async (req, res) => {
       const user = req.body;
       const query = { email: user.email };
@@ -82,6 +90,17 @@ async function run() {
         return res.send({ message: "user already exists", insertedId: null });
       }
       const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
+
+    app.patch("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
+      const { id } = req.params;
+      const { role } = req.body;
+
+      // Find the user by ID and update their role
+      const query = { _id: new ObjectId(id) };
+      const update = { $set: { role: role } };
+      const result = await usersCollection.updateOne(query, update);
       res.send(result);
     });
     
