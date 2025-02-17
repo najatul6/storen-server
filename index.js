@@ -213,7 +213,14 @@ async function run() {
       res.send(result);
     });
 
-    
+    // Get all Orders
+    app.post("/orders", async (req, res) => {
+      const order = req.body;
+      const result = await orderCollection.insertOne(order);
+      res.send(result);
+    });
+
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(
