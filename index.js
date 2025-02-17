@@ -252,8 +252,8 @@ async function run() {
       const result = await orderCollection.aggregate([
         {
           $group: {
-            _id: "$status", // Group by status
-            totalRevenue: { $sum: "$totalPrice" }, // Sum the totalPrice for each status
+            _id: "$status", 
+            totalRevenue: { $sum: "$totalPrice" }, 
           }
         }
       ]).toArray();
@@ -276,7 +276,7 @@ async function run() {
         }
       });
 
-      res.send(revenueData); // Send the revenue data for each status
+      res.send(revenueData); 
     });
 
     // Send a ping to confirm a successful connection
