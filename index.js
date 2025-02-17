@@ -30,11 +30,11 @@ async function run() {
     // await client.connect();
 
     // Create a database and collection
-    const usersCollection = client.db("NiNSupply").collection("users");
-    const productsCollection = client.db("NiNSupply").collection("products");
-    const categoryCollection = client.db("NiNSupply").collection("category");
-    const cartsCollection = client.db("NiNSupply").collection("carts");
-    const orderCollection = client.db("NiNSupply").collection("all-orders");
+    const usersCollection = client.db("StoreNDB").collection("users");
+    const productsCollection = client.db("StoreNDB").collection("products");
+    const categoryCollection = client.db("StoreNDB").collection("category");
+    const cartsCollection = client.db("StoreNDB").collection("carts");
+    const orderCollection = client.db("StoreNDB").collection("all-orders");
 
     // JWT
     app.post("/jwt", async (req, res) => {
@@ -73,6 +73,17 @@ async function run() {
       next();
     };
 
+    // Get all users
+    app.post("/createUser", async (req, res) => {
+      const user = req.body;
+      const query = { email: user.email };
+      const existingUser = await usersCollection.findOne(query);
+      if (existingUser) {
+        return res.send({ message: "user already exists", insertedId: null });
+      }
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
     
 
    
