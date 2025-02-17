@@ -247,6 +247,38 @@ async function run() {
       res.send(result);
     });
 
+    // Calculate Total Revenue for Different Order Statuses
+    app.get("/totalRevenue", async (req, res) => {
+      const result = await orderCollection.aggregate([
+        {
+          $group: {
+            _id: "$status", // Group by status
+            totalRevenue: { $sum: "$totalPrice" }, // Sum the totalPrice for each status
+          }
+        }
+      ]).toArray();
+
+      // Format the result with default values
+      const revenueData = {
+        pending: 0,
+        processing: 0,
+        completed: 0,
+      };
+
+      // Map the result to corresponding statuses
+      result.forEach(item => {
+        if (item._id === "Pending") {
+          revenueData.pending = item.totalRevenue;
+        } else if (item._id === "Processing") {
+          revenueData.processing = item.totalRevenue;
+        } else if (item._id === "Complete") {
+          revenueData.completed = item.totalRevenue;
+        }
+      });
+
+      res.send(revenueData); // Send the revenue data for each status
+    });
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(
