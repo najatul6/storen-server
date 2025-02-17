@@ -292,7 +292,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Hello World! This is a base template for a Node.js server.");
+  res.send("Hello World! This is a template for a Node.js server.");
 });
 
 app.listen(port, () => {
