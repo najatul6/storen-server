@@ -182,13 +182,19 @@ async function run() {
     });
 
     // Get all Carts
- app.get("/carts", async (req, res) => {
+    app.get("/carts", async (req, res) => {
       const email = req.query.email;
       if (!email) {
         return res.status(400).send({ message: "User email is required" });
       }
       const query = { userEmail: email };
       const result = await cartsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.post("/carts", async (req, res) => {
+      const cartsItems = req.body;
+      const result = await cartsCollection.insertOne(cartsItems);
       res.send(result);
     });
 
