@@ -181,6 +181,16 @@ async function run() {
       res.send(result);
     });
 
+    // Get all Carts
+ app.get("/carts", async (req, res) => {
+      const email = req.query.email;
+      if (!email) {
+        return res.status(400).send({ message: "User email is required" });
+      }
+      const query = { userEmail: email };
+      const result = await cartsCollection.find(query).toArray();
+      res.send(result);
+    });
 
 
     // Send a ping to confirm a successful connection
